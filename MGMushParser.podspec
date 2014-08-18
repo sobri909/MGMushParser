@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name         = "MGEvents"
+  s.name         = "MGMushParser"
   s.version      = "1.0.0"
   s.summary      = "Create NSAttributedStrings from NSStrings with lightweight Mush markup"
   s.homepage     = "https://github.com/sobri909/MGMushParser"

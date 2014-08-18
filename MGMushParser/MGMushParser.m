@@ -3,7 +3,6 @@
 //
 
 #import "MGMushParser.h"
-#import "UIColor+MGExpanded.h"
 
 @implementation MGMushParser {
   NSMutableAttributedString *working;
@@ -164,7 +163,7 @@
                 [attributeName isEqualToString:NSUnderlineColorAttributeName] ||
                 [attributeName isEqualToString:NSStrikethroughColorAttributeName]) {
               id hex = [substrs[[attributes[attributeName] intValue]] string];
-              UIColor *color = [UIColor colorWithHexString:hex];
+              UIColor *color = [self colorWithHexString:hex];
               attributesCopy[attributeName] = color;
             }
           }
@@ -269,6 +268,26 @@
         italicFontCache = NSMutableDictionary.new;
     });
     return italicFontCache;
+}
+
+#pragma mark - Colour Tools
+
+- (UIColor *)colorWithHexString:(NSString *)hexString {
+  NSString *clean = [hexString stringByReplacingOccurrencesOfString:@"#"
+      withString:@""];
+  NSScanner *scanner = [NSScanner scannerWithString:clean];
+  unsigned hexNum;
+  if (![scanner scanHexInt:&hexNum]) {
+    return nil;
+  }
+  return [UIColor colorWithRGBHex:hexNum];
+}
+
+- (UIColor *)colorWithRGBHex:(UInt32)hex {
+  int r = (hex >> 16) & 0xFF;
+  int g = (hex >> 8) & 0xFF;
+  int b = (hex) & 0xFF;
+  return [UIColor colorWithRed:r / 255.0 green:g / 255.0 blue:b / 255.0 alpha:1];
 }
 
 @end

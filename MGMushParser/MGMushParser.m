@@ -280,7 +280,7 @@
   if (![scanner scanHexInt:&hexNum]) {
     return nil;
   }
-  return [UIColor colorWithRGBHex:hexNum];
+  return [self colorWithRGBHex:hexNum];
 }
 
 - (UIColor *)colorWithRGBHex:(UInt32)hex {

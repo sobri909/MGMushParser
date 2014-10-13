@@ -52,6 +52,12 @@
     @"replace":@[@"", @1, @""],
     @"attributes":@[@{ }, @{ NSUnderlineStyleAttributeName:@(NSUnderlineStyleSingle) }, @{ }]
   };
+  
+  id strikethroughParser = @{
+    @"regex":@"(~{2})(.+?)(~{2})",
+    @"replace":@[@"", @1, @""],
+    @"attributes":@[@{ }, @{ NSStrikethroughStyleAttributeName:@(NSUnderlineStyleSingle) }, @{ }]
+};
 
   id monospaceParser = @{
     @"regex":@"(`)(.+?)(`)",
@@ -74,6 +80,7 @@
   [self applyParser:boldParser];
   [self applyParser:italicParser];
   [self applyParser:underlineParser];
+  [self applyParser:strikethroughParser];
   [self applyParser:monospaceParser];
   [self applyParser:colourParser];
   [self applyParser:bgColourParser];
@@ -97,6 +104,11 @@
     @"replace":@[@"", @1, @""]
   };
 
+  id strikethroughParser = @{
+    @"regex":@"(~{2})(.+?)(~{2})",
+    @"replace":@[@"", @1, @""]
+  };
+
   id monospaceParser = @{
     @"regex":@"(`)(.+?)(`)",
     @"replace":@[@"", @1, @""]
@@ -115,6 +127,7 @@
   [self applyParser:boldParser];
   [self applyParser:italicParser];
   [self applyParser:underlineParser];
+  [self applyParser:strikethroughParser];
   [self applyParser:monospaceParser];
   [self applyParser:colourParser];
   [self applyParser:bgColourParser];

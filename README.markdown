@@ -6,8 +6,10 @@ Create an `NSAttributedString` from an `NSString` with lightweight **Mush** mark
 - _Italics_ are achieved with //double slashes//
 - <u>Underlining</u> is achieved with \_\_double underscores\_\_
 - `Monospacing` is achieved with \`single backticks\`
+- ~~Strikethrough~~ is achieved with \~~double tildes\~~
 - Coloured text is achieved with {#123456|the coloured text}
 - Set text background colour with {bg#123456|the text}
+- Adjust kerning with {k4.5|the more widely spaced text}
 
 ### CocoaPods Setup
 

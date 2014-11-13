@@ -77,6 +77,11 @@
     @"attributes":@[@{ }, @{ }, @{ }, @{ NSBackgroundColorAttributeName:@1 }, @{ }]
   };
 
+    id kerningParser = @{
+          @"regex":@"(\\{k)(.+?)(\\|)(.+?)(\\})", @"replace":@[@"", @"", @"", @3, @""],
+          @"attributes":@[@{}, @{}, @{}, @{NSKernAttributeName:@1}, @{}]
+    };
+
   [self applyParser:boldParser];
   [self applyParser:italicParser];
   [self applyParser:underlineParser];
@@ -84,6 +89,7 @@
   [self applyParser:monospaceParser];
   [self applyParser:colourParser];
   [self applyParser:bgColourParser];
+    [self applyParser:kerningParser];
 }
 
 - (void)strip {
@@ -124,6 +130,10 @@
     @"replace":@[@"", @"", @"", @3, @""]
   };
 
+    id kerningParser = @{
+          @"regex":@"(\\{k)(.+?)(\\|)(.+?)(\\})", @"replace":@[@"", @"", @"", @3, @""]
+    };
+
   [self applyParser:boldParser];
   [self applyParser:italicParser];
   [self applyParser:underlineParser];
@@ -131,6 +141,7 @@
   [self applyParser:monospaceParser];
   [self applyParser:colourParser];
   [self applyParser:bgColourParser];
+    [self applyParser:kerningParser];
 }
 
 - (void)applyParser:(NSDictionary *)parser {
@@ -170,15 +181,21 @@
           }
           NSMutableDictionary *attributesCopy = [attributes mutableCopy];
           for (NSString *attributeName in attributes) {
+
             // convert any colour attributes from hex
             if ([attributeName isEqualToString:NSForegroundColorAttributeName] ||
                 [attributeName isEqualToString:NSBackgroundColorAttributeName] ||
                 [attributeName isEqualToString:NSUnderlineColorAttributeName] ||
                 [attributeName isEqualToString:NSStrikethroughColorAttributeName]) {
               id hex = [substrs[[attributes[attributeName] intValue]] string];
-              UIColor *color = [self colorWithHexString:hex];
-              attributesCopy[attributeName] = color;
+              attributesCopy[attributeName] = [self colorWithHexString:hex];
             }
+
+              // make an NSNumber for kerning
+              if ([attributeName isEqualToString:NSKernAttributeName]) {
+                  NSString *str = [substrs[[attributes[attributeName] intValue]] string];
+                  attributesCopy[attributeName] = @(str.floatValue);
+              }
           }
           NSMutableAttributedString *repl = replacements[i];
           [repl addAttributes:attributesCopy range:(NSRange){0, repl.length}];

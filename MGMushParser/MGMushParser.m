@@ -77,11 +77,18 @@
     @"attributes":@[@{ }, @{ }, @{ }, @{ NSBackgroundColorAttributeName:@1 }, @{ }]
   };
 
-    id kerningParser = @{
-          @"regex":@"(\\{k)(.+?)(\\|)(.+?)(\\})", @"replace":@[@"", @"", @"", @3, @""],
-          @"attributes":@[@{}, @{}, @{}, @{NSKernAttributeName:@1}, @{}]
-    };
+  id kerningParser = @{
+    @"regex":@"(\\{k)(.+?)(\\|)(.+?)(\\})", @"replace":@[@"", @"", @"", @3, @""],
+    @"attributes":@[@{}, @{}, @{}, @{NSKernAttributeName:@1}, @{}]
+  };
 
+  id fontParser = @{
+    @"regex":@"(\\{font:)(.+?)(\\|)(.+?)(\\})",
+    @"replace":@[@"", @"", @"", @3, @""],
+    @"attributes":@[@{}, @{}, @{}, @{NSFontAttributeName:@1}, @{}]
+  };
+
+  [self applyParser:fontParser];
   [self applyParser:boldParser];
   [self applyParser:italicParser];
   [self applyParser:underlineParser];
@@ -89,7 +96,7 @@
   [self applyParser:monospaceParser];
   [self applyParser:colourParser];
   [self applyParser:bgColourParser];
-    [self applyParser:kerningParser];
+  [self applyParser:kerningParser];
 }
 
 - (void)strip {
@@ -130,10 +137,16 @@
     @"replace":@[@"", @"", @"", @3, @""]
   };
 
-    id kerningParser = @{
-          @"regex":@"(\\{k)(.+?)(\\|)(.+?)(\\})", @"replace":@[@"", @"", @"", @3, @""]
-    };
+  id kerningParser = @{
+    @"regex":@"(\\{k)(.+?)(\\|)(.+?)(\\})", @"replace":@[@"", @"", @"", @3, @""]
+  };
 
+  id fontParser = @{
+    @"regex":@"(\\{font:)(.+?)(\\|)(.+?)(\\})",
+    @"replace":@[@"", @"", @"", @3, @""],
+  };
+
+  [self applyParser:fontParser];
   [self applyParser:boldParser];
   [self applyParser:italicParser];
   [self applyParser:underlineParser];
@@ -141,7 +154,7 @@
   [self applyParser:monospaceParser];
   [self applyParser:colourParser];
   [self applyParser:bgColourParser];
-    [self applyParser:kerningParser];
+  [self applyParser:kerningParser];
 }
 
 - (void)applyParser:(NSDictionary *)parser {
@@ -181,6 +194,21 @@
           }
           NSMutableDictionary *attributesCopy = [attributes mutableCopy];
           for (NSString *attributeName in attributes) {
+              // convert any font string names to UIFonts.
+              // Font strings should be in the format: "Helvetica-Neue,12"
+              if ([attributeName isEqualToString:NSFontAttributeName] &&
+                  [substrs[[attributes[attributeName] intValue]] isKindOfClass:NSAttributedString.class]) {
+                  NSString *fontString = [substrs[[attributes[attributeName] intValue]] string];
+                  NSArray *components = [fontString componentsSeparatedByString:@","];
+                  if (components.count == 2) {
+                      NSString *fontName = components[0];
+                      CGFloat size = [components[1] doubleValue];
+                      UIFont *font = [UIFont fontWithName:fontName size:size];
+                      if (font) {
+                          attributesCopy[attributeName] = font;
+                      }
+                  }
+              }
 
             // convert any colour attributes from hex
             if ([attributeName isEqualToString:NSForegroundColorAttributeName] ||

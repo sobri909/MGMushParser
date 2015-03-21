@@ -10,6 +10,7 @@ Create an `NSAttributedString` from an `NSString` with lightweight **Mush** mark
 - Coloured text is achieved with {#123456|the coloured text}
 - Set text background colour with {bg#123456|the text}
 - Adjust kerning with {k4.5|the more widely spaced text}
+- Change font with {font:HelveticaNeue,12pt|text in a different font}
 
 ### CocoaPods Setup
 

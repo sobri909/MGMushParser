@@ -197,6 +197,7 @@
               // convert any font string names to UIFonts.
               // Font strings should be in the format: "Helvetica-Neue,12"
               if ([attributeName isEqualToString:NSFontAttributeName] &&
+                  [attributes[attributeName] isKindOfClass:NSNumber.class] &&
                   [substrs[[attributes[attributeName] intValue]] isKindOfClass:NSAttributedString.class]) {
                   NSString *fontString = [substrs[[attributes[attributeName] intValue]] string];
                   NSArray *components = [fontString componentsSeparatedByString:@","];

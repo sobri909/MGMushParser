@@ -1,3 +1,7 @@
+## 1.2.1
+
+Fixed crash in bold and italic mush parser. 
+
 ## 1.2.0
 
 Added font markup. 

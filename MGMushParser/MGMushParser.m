@@ -12,10 +12,23 @@
 + (NSAttributedString *)attributedStringFromMush:(NSString *)markdown
                                             font:(UIFont *)font
                                            color:(UIColor *)color {
+    /*Forward the call, just use nil as style to force the default style. Enforce backward compatibility. */
+    return [MGMushParser attributedStringFromMush:markdown
+                                             font:font
+                                            color:color
+                                            style:nil];
+}
+
++ (NSAttributedString *)attributedStringFromMush:(NSString *)markdown
+                                            font:(UIFont *)font
+                                           color:(UIColor *)color
+                                           style:(NSParagraphStyle *)style {
   MGMushParser *parser = [[MGMushParser alloc] init];
   parser.mush = markdown;
   parser.baseColor = color;
   parser.baseFont = font;
+  parser.paragraphStyle = (style !=nil ? style : NSParagraphStyle.defaultParagraphStyle);
+
   if ([UILabel instancesRespondToSelector:@selector(attributedText)]) {
     [parser parse];
   } else {
@@ -30,7 +43,7 @@
   id base = @{
     NSForegroundColorAttributeName:self.baseColor,
     NSFontAttributeName:self.baseFont,
-    NSParagraphStyleAttributeName:NSParagraphStyle.defaultParagraphStyle
+    NSParagraphStyleAttributeName:self.paragraphStyle
   };
   [working addAttributes:base range:(NSRange){0, working.length}];
 

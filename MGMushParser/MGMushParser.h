@@ -33,9 +33,26 @@ Use `MGMushParser` to create an `NSAttributedString` from an `NSString` with lig
                                             font:(UIFont *)font
                                            color:(UIColor *)color;
 
+/**
+* Takes an `NSString` and returns an appropriately attributed
+* `NSAttributedString`. Additional option to specify the paragraph style.
+*
+* @param markdown An `NSString` containing text marked up with `Mush`
+* @param font The base font to use, from which bold and italic variants will be
+* derived
+* @param color The text colour to use for the resulting attributed string
+* @param style The paragraph style. Set to nil to use the default style.
+*/
++ (NSAttributedString *)attributedStringFromMush:(NSString *)mush
+                                            font:(UIFont *)font
+                                           color:(UIColor *)color
+                                           style:(NSParagraphStyle *)style;
+
 @property (nonatomic, copy) NSString *mush;
 @property (nonatomic, retain) UIFont *baseFont;
 @property (nonatomic, retain) UIColor *baseColor;
+@property (nonatomic, retain) NSParagraphStyle *paragraphStyle;
+
 - (void)parse;
 - (void)strip;
 - (NSAttributedString *)attributedString;

@@ -33,9 +33,15 @@ Use `MGMushParser` to create an `NSAttributedString` from an `NSString` with lig
                                             font:(UIFont *)font
                                            color:(UIColor *)color;
 
++ (NSAttributedString *)attributedStringFromMush:(NSString *)markdown
+                                            font:(UIFont *)font
+                                           color:(UIColor *)color
+                                  paragraphStyle:(NSParagraphStyle *)paragraphStyle;
+
 @property (nonatomic, copy) NSString *mush;
 @property (nonatomic, retain) UIFont *baseFont;
 @property (nonatomic, retain) UIColor *baseColor;
+@property (nonatomic, retain) NSParagraphStyle *paragraphStyle;
 - (void)parse;
 - (void)strip;
 - (NSAttributedString *)attributedString;

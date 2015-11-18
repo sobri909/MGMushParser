@@ -12,16 +12,24 @@
 + (NSAttributedString *)attributedStringFromMush:(NSString *)markdown
                                             font:(UIFont *)font
                                            color:(UIColor *)color {
-  MGMushParser *parser = [[MGMushParser alloc] init];
-  parser.mush = markdown;
-  parser.baseColor = color;
-  parser.baseFont = font;
-  if ([UILabel instancesRespondToSelector:@selector(attributedText)]) {
-    [parser parse];
-  } else {
-    [parser strip];
-  }
-  return parser.attributedString;
+    return [self attributedStringFromMush:markdown font:font color:color paragraphStyle:nil];
+}
+
++ (NSAttributedString *)attributedStringFromMush:(NSString *)markdown
+                                            font:(UIFont *)font
+                                           color:(UIColor *)color
+                                  paragraphStyle:(NSParagraphStyle *)paragraphStyle {
+    MGMushParser *parser = [[MGMushParser alloc] init];
+    parser.mush = markdown;
+    parser.baseColor = color;
+    parser.baseFont = font;
+    parser.paragraphStyle = paragraphStyle;
+    if ([UILabel instancesRespondToSelector:@selector(attributedText)]) {
+        [parser parse];
+    } else {
+        [parser strip];
+    }
+    return parser.attributedString;
 }
 
 - (void)parse {
@@ -30,7 +38,7 @@
   id base = @{
     NSForegroundColorAttributeName:self.baseColor,
     NSFontAttributeName:self.baseFont,
-    NSParagraphStyleAttributeName:NSParagraphStyle.defaultParagraphStyle
+    NSParagraphStyleAttributeName:self.paragraphStyle ?: NSParagraphStyle.defaultParagraphStyle
   };
   [working addAttributes:base range:(NSRange){0, working.length}];
 

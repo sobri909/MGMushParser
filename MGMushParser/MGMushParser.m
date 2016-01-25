@@ -56,13 +56,13 @@
   id boldParser = @{
     @"regex":@"(\\*{2})(.+?)(\\*{2})",
     @"replace":@[@"", @1, @""],
-    @"attributes":@[@{ }, @{ NSFontAttributeName:bold }, @{ }]
+    @"attributes":@[@{ }, @{ NSFontAttributeName:self.boldFont }, @{ }]
   };
 
   id italicParser = @{
     @"regex":@"(/{2})(.+?)(/{2})",
     @"replace":@[@"", @1, @""],
-    @"attributes":@[@{ }, @{ NSFontAttributeName:italic }, @{ }]
+    @"attributes":@[@{ }, @{ NSFontAttributeName:self.italicFont }, @{ }]
   };
 
   id underlineParser = @{

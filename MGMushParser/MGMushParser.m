@@ -5,25 +5,35 @@
 #import "MGMushParser.h"
 
 @implementation MGMushParser {
-  NSMutableAttributedString *working;
-  UIFont *bold, *italic, *monospace;
+    NSMutableAttributedString *working;
+    UIFont *monospace;
 }
 
 + (NSAttributedString *)attributedStringFromMush:(NSString *)markdown
                                             font:(UIFont *)font
                                            color:(UIColor *)color {
-    return [self attributedStringFromMush:markdown font:font color:color paragraphStyle:nil];
+    
+    return [self attributedStringFromMush:markdown font:font boldFont:nil italicFont:nil color:color paragraphStyle:nil];
 }
 
 + (NSAttributedString *)attributedStringFromMush:(NSString *)markdown
                                             font:(UIFont *)font
                                            color:(UIColor *)color
                                   paragraphStyle:(NSParagraphStyle *)paragraphStyle {
+    
+    return [self attributedStringFromMush:markdown font:font boldFont:nil italicFont:nil color:color paragraphStyle:paragraphStyle];
+}
+
++ (NSAttributedString *)attributedStringFromMush:(NSString *)markdown font:(UIFont *)font boldFont:(UIFont *)boldFont italicFont:(UIFont *)italicFont color:(UIColor *)color paragraphStyle:(NSParagraphStyle *)paragraphStyle {
+    
     MGMushParser *parser = [[MGMushParser alloc] init];
     parser.mush = markdown;
     parser.baseColor = color;
     parser.baseFont = font;
+    parser.boldFont = boldFont;
+    parser.italicFont = italicFont;
     parser.paragraphStyle = paragraphStyle;
+    
     if ([UILabel instancesRespondToSelector:@selector(attributedText)]) {
         [parser parse];
     } else {
@@ -264,34 +274,28 @@
     }
 
     CGFloat size = font.pointSize;
-    CFStringRef name = (__bridge CFStringRef)font.fontName;
-    NSString *fontCacheKey = [NSString stringWithFormat:@"%@-%@", name, @(size)];
-
     monospace = [UIFont fontWithName:@"CourierNewPSMT" size:size];
-    bold = MGMushParser.boldFontCache[fontCacheKey];
-    italic = MGMushParser.italicFontCache[fontCacheKey];
+}
 
-    if (!bold || !italic) {
+- (void)setBoldFont:(UIFont *)boldFont {
+    _boldFont = boldFont;
+    
+    if (!boldFont && self.baseFont) {
+        CGFloat size = self.baseFont.pointSize;
+        CFStringRef name = (__bridge CFStringRef)self.baseFont.fontName;
+        NSString *fontCacheKey = [NSString stringWithFormat:@"%@-%@", name, @(size)];
+        
         // base ctfont
         CTFontRef ctBase = CTFontCreateWithName(name, size, NULL);
-
+        
         // bold ctFont
         CTFontRef ctBold = CTFontCreateCopyWithSymbolicTraits(ctBase, 0, NULL,
                                                               kCTFontBoldTrait, kCTFontBoldTrait);
         CFStringRef boldName = CTFontCopyName(ctBold, kCTFontPostScriptNameKey);
-        bold = [UIFont fontWithName:(__bridge NSString *)boldName size:size] ?: font;
-
-        // italic font
-        CTFontRef ctItalic = CTFontCreateCopyWithSymbolicTraits(ctBase, 0, NULL,
-                                                                kCTFontItalicTrait, kCTFontItalicTrait);
-        CFStringRef italicName = CTFontCopyName(ctItalic, kCTFontPostScriptNameKey);
-        italic = [UIFont fontWithName:(__bridge NSString *)italicName size:size] ?: font;
-
+        _boldFont = [UIFont fontWithName:(__bridge NSString *)boldName size:size] ?: self.baseFont;
+        
         if (bold) {
-            MGMushParser.boldFontCache[fontCacheKey] = bold;
-        }
-        if (italic) {
-            MGMushParser.italicFontCache[fontCacheKey] = italic;
+            MGMushParser.boldFontCache[fontCacheKey] = _boldFont;
         }
         if (ctBase) {
             CFRelease(ctBase);
@@ -299,11 +303,37 @@
         if (ctBold) {
             CFRelease(ctBold);
         }
-        if (ctItalic) {
-            CFRelease(ctItalic);
-        }
         if (boldName) {
             CFRelease(boldName);
+        }
+    }
+}
+
+- (void)setItalicFont:(UIFont *)italicFont {
+    _italicFont = italicFont;
+    
+    if (!italicFont && self.baseFont) {
+        CGFloat size = self.baseFont.pointSize;
+        CFStringRef name = (__bridge CFStringRef)self.baseFont.fontName;
+        NSString *fontCacheKey = [NSString stringWithFormat:@"%@-%@", name, @(size)];
+        
+        // base ctfont
+        CTFontRef ctBase = CTFontCreateWithName(name, size, NULL);
+        
+        // italic font
+        CTFontRef ctItalic = CTFontCreateCopyWithSymbolicTraits(ctBase, 0, NULL,
+                                                                kCTFontItalicTrait, kCTFontItalicTrait);
+        CFStringRef italicName = CTFontCopyName(ctItalic, kCTFontPostScriptNameKey);
+        _italicFont = [UIFont fontWithName:(__bridge NSString *)italicName size:size] ?: self.baseFont;
+        
+        if (italic) {
+            MGMushParser.italicFontCache[fontCacheKey] = _italicFont;
+        }
+        if (ctBase) {
+            CFRelease(ctBase);
+        }
+        if (ctItalic) {
+            CFRelease(ctItalic);
         }
         if (italicName) {
             CFRelease(italicName);

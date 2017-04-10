@@ -24,7 +24,7 @@ Use `MGMushParser` to create an `NSAttributedString` from an `NSString` with lig
 * Takes an `NSString` and returns an appropriately attributed 
 * `NSAttributedString`.
 *
-* @param markdown An `NSString` containing text marked up with `Mush`
+* @param mush An `NSString` containing text marked up with `Mush`
 * @param font The base font to use, from which bold and italic variants will be
 * derived
 * @param color The text colour to use for the resulting attributed string

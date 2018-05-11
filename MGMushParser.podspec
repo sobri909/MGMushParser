@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/sobri909/MGMushParser"
   s.license      = { :type => "BSD", :file => "LICENSE" }
   s.author       = { "Matt Greenfield" => "matt@bigpaua.com" }
-  s.platform     = :ios, "6.0"
+  s.ios.deployment_target = '9.0'
   s.source       = { :git => "https://github.com/sobri909/MGMushParser.git", :tag => "1.2.1" }
   s.source_files = "MGMushParser/*.{h,m}"
   s.framework    = 'CoreText'  

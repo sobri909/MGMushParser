@@ -193,7 +193,7 @@
         for (int i = 0; i < match.numberOfRanges - 1; i++) {
           NSRange nudged = [match rangeAtIndex:i + 1];
           nudged.location -= nudge;
-          substrs[i] = [working attributedSubstringFromRange:nudged].mutableCopy;
+            substrs[i] = [self->working attributedSubstringFromRange:nudged].mutableCopy;
         }
 
         // make replacement substrings
@@ -253,7 +253,7 @@
           NSRange nudged = [match rangeAtIndex:i + 1];
           nudged.location -= nudge;
           nudge += [substrs[i] length] - [replacements[i] length];
-          [working replaceCharactersInRange:nudged
+            [self->working replaceCharactersInRange:nudged
               withAttributedString:replacements[i]];
         }
       }];

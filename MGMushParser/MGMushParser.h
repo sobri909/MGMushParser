@@ -1,6 +1,13 @@
 //
 //  Created by matt on 7/11/12.
 //
+#import <UIKit/UIKit.h>
+
+//! Project version number for MGMushParser.
+FOUNDATION_EXPORT double MGMushParserVersionNumber;
+
+//! Project version string for MGMushParser.
+FOUNDATION_EXPORT const unsigned char MGMushParserVersionString[];
 
 #import <CoreText/CoreText.h>
 

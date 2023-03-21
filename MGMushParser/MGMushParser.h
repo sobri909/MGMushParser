@@ -3,6 +3,7 @@
 //
 
 #import <CoreText/CoreText.h>
+#import <UIKit/UIKit.h>
 
 /**
 Use `MGMushParser` to create an `NSAttributedString` from an `NSString` with lightweight 
